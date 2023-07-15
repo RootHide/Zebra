@@ -5,6 +5,7 @@
 //  Created by Wilson Styres on 2/6/19.
 //  Copyright © 2019 Wilson Styres. All rights reserved.
 //
+#include "jbpath.h"
 
 #import "ZBConsoleViewController.h"
 #import "ZBStage.h"
@@ -292,7 +293,7 @@ typedef NS_ENUM(NSUInteger, ZBConsoleFinishOption) {
                 NSString *path = queue.zebraPath;
                 
                 NSArray *baseCommand;
-                if ([[ZBDevice packageManagementBinary] isEqualToString:@INSTALL_PREFIX @"/usr/bin/dpkg"]) {
+                if ([[ZBDevice packageManagementBinary] isEqualToString:jbpath(@INSTALL_PREFIX @"/usr/bin/dpkg")]) {
                     baseCommand = @[@"dpkg", queue.removingZebra ? @"-r" : @"-i", queue.zebraPath ? path : @"xyz.willy.zebra"];
                 }
                 else {
@@ -405,7 +406,7 @@ typedef NS_ENUM(NSUInteger, ZBConsoleFinishOption) {
         if (applicationBundlePaths.count > 1) {
             [self updateIconCaches];
         } else {
-            [ZBDevice uicache:@[@"-p", @INSTALL_PREFIX @"/Applications/Zebra.app"] observer:self];
+            [ZBDevice uicache:@[@"-p", jbpath(@INSTALL_PREFIX @"/Applications/Zebra.app")] observer:self];
         }
     }
 }

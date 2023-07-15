@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 53;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -57,6 +57,7 @@
 		4EC7F26927AE34E00078F953 /* ZBCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EC7F26827AE34E00078F953 /* ZBCommand.m */; };
 		4ECB1DF52948C9FD0049FE08 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4ECB1DF32948C9FD0049FE08 /* InfoPlist.strings */; };
 		7821AF6F2275F3A4006C0315 /* ZBAddSourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7821AF6D2275F3A4006C0315 /* ZBAddSourceViewController.m */; };
+		8406F2512A51E2DA006DC43A /* libjbpath.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8406F2502A51E2C2006DC43A /* libjbpath.dylib */; };
 		8900FA502201E9C200476310 /* ZBQueueViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8900FA4F2201E9C200476310 /* ZBQueueViewController.m */; };
 		89159FB021F8E5FD0012C8FE /* ZBPackageDepictionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89159FAF21F8E5FD0012C8FE /* ZBPackageDepictionViewController.m */; };
 		8916AC0E23CA9447008BA02C /* ZBRightIconTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8916AC0D23CA9447008BA02C /* ZBRightIconTableViewCell.xib */; };
@@ -225,6 +226,9 @@
 		4ECB1DF42948C9FD0049FE08 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7821AF6D2275F3A4006C0315 /* ZBAddSourceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZBAddSourceViewController.m; sourceTree = "<group>"; };
 		7821AF6E2275F3A4006C0315 /* ZBAddSourceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZBAddSourceViewController.h; sourceTree = "<group>"; };
+		8406F24D2A51E10C006DC43A /* jbpath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jbpath.h; sourceTree = "<group>"; };
+		8406F2502A51E2C2006DC43A /* libjbpath.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libjbpath.dylib; sourceTree = "<group>"; };
+		84EC033C2A510F3C00D3DDB3 /* libjbpath.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libjbpath.dylib; path = Zebra/libjbpath.dylib; sourceTree = "<group>"; };
 		8900FA4E2201E9C200476310 /* ZBQueueViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZBQueueViewController.h; sourceTree = "<group>"; };
 		8900FA4F2201E9C200476310 /* ZBQueueViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZBQueueViewController.m; sourceTree = "<group>"; };
 		8905455B243A8BEA001C03EA /* ZBPackageActionType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZBPackageActionType.h; sourceTree = "<group>"; };
@@ -417,6 +421,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8406F2512A51E2DA006DC43A /* libjbpath.dylib in Frameworks */,
 				4E2E6C0028216A4D0089E4FB /* Sentry in Frameworks */,
 				899784402242D25800C1138C /* libbz2.tbd in Frameworks */,
 				895071992239E414004AE338 /* libMobileGestalt.tbd in Frameworks */,
@@ -825,6 +830,8 @@
 		89C5FDD421B1B13700A10E58 = {
 			isa = PBXGroup;
 			children = (
+				8406F24D2A51E10C006DC43A /* jbpath.h */,
+				8406F2502A51E2C2006DC43A /* libjbpath.dylib */,
 				89C5FDDF21B1B13700A10E58 /* Zebra */,
 				89C5FDDE21B1B13700A10E58 /* Products */,
 				89E8633B21D5A8C00081E485 /* Frameworks */,
@@ -935,6 +942,7 @@
 		89E8633B21D5A8C00081E485 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				84EC033C2A510F3C00D3DDB3 /* libjbpath.dylib */,
 				8997843F2242D25800C1138C /* libbz2.tbd */,
 				895071982239E414004AE338 /* libMobileGestalt.tbd */,
 			);
@@ -1450,7 +1458,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEB_ARCH = "iphoneos-arm64";
-				DEVELOPMENT_TEAM = N2LN9ZT493;
+				DEVELOPMENT_TEAM = 49LJ27SG38;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1463,6 +1471,7 @@
 					"$(inherited)",
 				);
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)";
 				INFOPLIST_FILE = Zebra/Info.plist;
 				INSTALL_PATH = "$(INSTALL_PREFIX)$(LOCAL_APPS_DIR)";
 				INSTALL_PREFIX = /var/jb;
@@ -1471,12 +1480,18 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Zebra",
+					"$(PROJECT_DIR)",
+				);
 				MARKETING_VERSION = 1.1.35;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = xyz.willy.Zebra;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)";
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
 			};
 			name = "Debug Rootless";
@@ -1557,7 +1572,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEB_ARCH = "iphoneos-arm64";
 				DEPLOYMENT_POSTPROCESSING = YES;
-				DEVELOPMENT_TEAM = N2LN9ZT493;
+				DEVELOPMENT_TEAM = 49LJ27SG38;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1570,6 +1585,7 @@
 					"$(inherited)",
 				);
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)";
 				INFOPLIST_FILE = Zebra/Info.plist;
 				INSTALL_PATH = "$(INSTALL_PREFIX)$(LOCAL_APPS_DIR)";
 				INSTALL_PREFIX = /var/jb;
@@ -1578,6 +1594,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Zebra",
+					"$(PROJECT_DIR)",
+				);
 				MARKETING_VERSION = 1.1.35;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = xyz.willy.Zebra;
@@ -1585,6 +1606,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIPFLAGS = "-rSTx";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)";
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
 			};
 			name = "Release Rootless";
@@ -1727,7 +1749,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEB_ARCH = "iphoneos-arm";
-				DEVELOPMENT_TEAM = N2LN9ZT493;
+				DEVELOPMENT_TEAM = 49LJ27SG38;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1739,6 +1761,7 @@
 					"DEB_ARCH='\"$(DEB_ARCH)\"'",
 					"$(inherited)",
 				);
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)";
 				INFOPLIST_FILE = Zebra/Info.plist;
 				INSTALL_PATH = "$(INSTALL_PREFIX)$(LOCAL_APPS_DIR)";
 				INSTALL_PREFIX = "";
@@ -1747,12 +1770,18 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Zebra",
+					"$(PROJECT_DIR)",
+				);
 				MARKETING_VERSION = 1.1.35;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = xyz.willy.Zebra;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)";
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
 			};
 			name = Debug;
@@ -1772,7 +1801,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEB_ARCH = "iphoneos-arm";
 				DEPLOYMENT_POSTPROCESSING = YES;
-				DEVELOPMENT_TEAM = N2LN9ZT493;
+				DEVELOPMENT_TEAM = 49LJ27SG38;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1784,6 +1813,7 @@
 					"DEB_ARCH='\"$(DEB_ARCH)\"'",
 					"$(inherited)",
 				);
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)";
 				INFOPLIST_FILE = Zebra/Info.plist;
 				INSTALL_PATH = "$(INSTALL_PREFIX)$(LOCAL_APPS_DIR)";
 				INSTALL_PREFIX = "";
@@ -1792,6 +1822,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Zebra",
+					"$(PROJECT_DIR)",
+				);
 				MARKETING_VERSION = 1.1.35;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = xyz.willy.Zebra;
@@ -1799,6 +1834,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIPFLAGS = "-rSTx";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)";
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
 			};
 			name = Release;

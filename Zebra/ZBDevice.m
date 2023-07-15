@@ -5,6 +5,7 @@
 //  Created by Thatchapon Unprasert on 7/6/2019
 //  Copyright © 2019 Wilson Styres. All rights reserved.
 //
+#include "jbpath.h"
 
 #import "ZBDevice.h"
 #import "ZBSettings.h"
@@ -126,7 +127,7 @@ static ZBBootstrap bootstrap = ZBBootstrapUnknown;
     //       Skipping it there for now, if we get to this point we should be confident that
     //       supersling is working anyway.
     if (@available(iOS 11, *)) {
-        NSString *whoAmI = [ZBCommand execute:@INSTALL_PREFIX @"/usr/bin/id" withArguments:@[@"-u"] asRoot:YES] ?: @"?";
+        NSString *whoAmI = [ZBCommand execute:jbpath(@INSTALL_PREFIX @"/usr/bin/id") withArguments:@[@"-u"] asRoot:YES] ?: @"?";
         if (![whoAmI isEqualToString:@"0\n"]) {
             if (error) {
                 *error = [NSError errorWithDomain:NSCocoaErrorDomain code:51 userInfo:@{
@@ -304,7 +305,7 @@ static ZBBootstrap bootstrap = ZBBootstrapUnknown;
     if (self.needsSimulation) {
         bootstrap = ZBBootstrapSimulated;
     } else if (@available(iOS 11, *)) {
-        if ([self _isRegularFile:@INSTALL_PREFIX @"/.procursus_strapped"]) {
+        if ([self _isRegularFile:jbpath(@INSTALL_PREFIX @"/.procursus_strapped")]) {
             bootstrap = ZBBootstrapProcursus;
         } else {
             bootstrap = ZBBootstrapElucubratus;
@@ -326,10 +327,10 @@ static ZBBootstrap bootstrap = ZBBootstrapUnknown;
         @"/.installed_unc0ver":    @(ZBJailbreakUnc0ver),
         @"/.installed_odyssey":    @(ZBJailbreakOdyssey),
         @"/.installed_taurine":    @(ZBJailbreakTaurine),
-        @INSTALL_PREFIX @"/.installed_palera1n":  @(ZBJailbreakPalera1n), // 1.x
-        @INSTALL_PREFIX @"/.palecursus_strapped": @(ZBJailbreakPalera1n), // 2.x
-        @INSTALL_PREFIX @"/.installed_fugu15max": @(ZBJailbreakDopamine),
-        @INSTALL_PREFIX @"/.installed_dopamine":  @(ZBJailbreakDopamine),
+        jbpath(@INSTALL_PREFIX @"/.installed_palera1n"):  @(ZBJailbreakPalera1n), // 1.x
+        jbpath(@INSTALL_PREFIX @"/.palecursus_strapped"): @(ZBJailbreakPalera1n), // 2.x
+        jbpath(@INSTALL_PREFIX @"/.installed_fugu15max"): @(ZBJailbreakDopamine),
+        jbpath(@INSTALL_PREFIX @"/.installed_dopamine"):  @(ZBJailbreakDopamine),
         @"/.installed_socket":     @(ZBJailbreakSocket),
         @"/.p0laris":              @(ZBJailbreakP0laris),
         @"/.installed-openpwnage": @(ZBJailbreakOpenpwnage),
@@ -446,11 +447,11 @@ static ZBBootstrap bootstrap = ZBBootstrapUnknown;
     static NSString *packageManagementBinary = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        if ([[NSFileManager defaultManager] fileExistsAtPath:@INSTALL_PREFIX @"/usr/bin/apt"]) {
-            packageManagementBinary = @INSTALL_PREFIX @"/usr/bin/apt";
+        if ([[NSFileManager defaultManager] fileExistsAtPath:jbpath(@INSTALL_PREFIX @"/usr/bin/apt")]) {
+            packageManagementBinary = jbpath(@INSTALL_PREFIX @"/usr/bin/apt");
         }
-        else if ([[NSFileManager defaultManager] fileExistsAtPath:@INSTALL_PREFIX @"/usr/bin/dpkg"]) {
-            packageManagementBinary = @INSTALL_PREFIX @"/usr/bin/dpkg";
+        else if ([[NSFileManager defaultManager] fileExistsAtPath:jbpath(@INSTALL_PREFIX @"/usr/bin/dpkg")]) {
+            packageManagementBinary = jbpath(@INSTALL_PREFIX @"/usr/bin/dpkg");
         }
     });
     return packageManagementBinary;
@@ -462,7 +463,7 @@ static ZBBootstrap bootstrap = ZBBootstrapUnknown;
     if (isPrefixed) {
         NSMutableArray <NSString *> *prefixedPath = [NSMutableArray array];
         for (NSString *item in path) {
-            [prefixedPath addObject:[@INSTALL_PREFIX stringByAppendingPathComponent:item]];
+            [prefixedPath addObject:[jbpath(@INSTALL_PREFIX) stringByAppendingPathComponent:item]];
         }
         path = [prefixedPath arrayByAddingObjectsFromArray:path];
     }

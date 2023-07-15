@@ -5,6 +5,7 @@
 //  Created by Wilson Styres on 2/2/19.
 //  Copyright © 2019 Wilson Styres. All rights reserved.
 //
+#include "jbpath.h"
 
 #import "ZBPackage.h"
 #import "ZBPackageActions.h"
@@ -67,7 +68,7 @@
         return @[@"/.", @"/You", @"/You/Are", @"/You/Are/Simulated"];
     }
     
-    NSString *path = [NSString stringWithFormat:@INSTALL_PREFIX @"/var/lib/dpkg/info/%@.list", packageID];
+    NSString *path = [NSString stringWithFormat:jbpath(@INSTALL_PREFIX @"/var/lib/dpkg/info/%@.list"), packageID];
     if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
         NSError *readError = NULL;
         NSString *contents = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&readError];
@@ -90,7 +91,7 @@
         ZBLog(@"[Zebra] Locating package ID for %@", packageID);
 
         // We need to look up the *actual* package ID of this deb from the deb's control file
-        NSString *stringRead = [ZBCommand execute:@INSTALL_PREFIX @"/usr/bin/dpkg"
+        NSString *stringRead = [ZBCommand execute:jbpath(@INSTALL_PREFIX @"/usr/bin/dpkg")
                                 withArguments:@[@"-I", packageID, @"control"]
                                        asRoot:NO];
 
@@ -141,7 +142,7 @@
         ZBLog(@"[Zebra] Locating package ID for %@", packageID);
 
         // We need to look up the *actual* package ID of this deb from the deb's control file
-        NSString *stringRead = [ZBCommand execute:@INSTALL_PREFIX @"/usr/bin/dpkg"
+        NSString *stringRead = [ZBCommand execute:jbpath(@INSTALL_PREFIX @"/usr/bin/dpkg")
                                     withArguments:@[@"-I", packageID, @"control"]
                                            asRoot:NO];
 
@@ -342,7 +343,7 @@
     
     NSString *stringRead;
     if (![ZBDevice needsSimulation]) {
-        stringRead = [ZBCommand execute:@INSTALL_PREFIX @"/usr/bin/dpkg"
+        stringRead = [ZBCommand execute:jbpath(@INSTALL_PREFIX @"/usr/bin/dpkg")
                           withArguments:@[@"-I", path, @"control"]
                                  asRoot:NO];
     }
@@ -594,7 +595,7 @@
         NSTimeInterval seconds = round([[NSDate date] timeIntervalSinceReferenceDate] / 300.0) * 300.0;
         return [NSDate dateWithTimeIntervalSinceReferenceDate:seconds];
     }
-	NSString *listPath = [NSString stringWithFormat:@INSTALL_PREFIX @"/var/lib/dpkg/info/%@.list", self.identifier];
+	NSString *listPath = [NSString stringWithFormat:jbpath(@INSTALL_PREFIX @"/var/lib/dpkg/info/%@.list"), self.identifier];
 	NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:listPath error:NULL];
 	return attributes[NSFileModificationDate];
 }

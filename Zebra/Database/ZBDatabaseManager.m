@@ -5,6 +5,7 @@
 //  Created by Wilson Styres on 11/30/18.
 //  Copyright © 2018 Wilson Styres. All rights reserved.
 //
+#include "jbpath.h"
 
 #import "ZBDatabaseManager.h"
 #import "ZBDependencyResolver.h"
@@ -442,7 +443,7 @@
     if ([ZBDevice needsSimulation]) { // If the target is a simlator, load a demo list of installed packages
         installedPath = [[NSBundle mainBundle] pathForResource:@"Installed" ofType:@"pack"];
     } else { // Otherwise, load the actual file
-        installedPath = @INSTALL_PREFIX @"/var/lib/dpkg/status";
+        installedPath = jbpath(@INSTALL_PREFIX @"/var/lib/dpkg/status");
     }
 
     if ([self openDatabase] == SQLITE_OK) {

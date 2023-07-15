@@ -5,6 +5,7 @@
 //  Created by Wilson Styres on 11/30/18.
 //  Copyright © 2018 Wilson Styres. All rights reserved.
 //
+#include "jbpath.h"
 
 #import "ZBSource.h"
 #import "ZBSourceManager.h"
@@ -51,7 +52,7 @@ const char *textColumn(sqlite3_stmt *statement, int column) {
     [local setLabel:local.origin];
     [local setSourceDescription:NSLocalizedString(@"Locally installed packages", @"")];
     [local setSourceID:sourceID];
-    [local setBaseFilename:@INSTALL_PREFIX @"/var/lib/dpkg/status"];
+    [local setBaseFilename:jbpath(@INSTALL_PREFIX @"/var/lib/dpkg/status")];
     return local;
 }
 
@@ -78,7 +79,7 @@ const char *textColumn(sqlite3_stmt *statement, int column) {
         imageName = components[0];
     }
     
-    UIImage *sectionImage = [UIImage imageNamed:imageName] ?: [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@INSTALL_PREFIX @"/Applications/Zebra.app/Sections/%@.png", imageName]] ?: [UIImage imageNamed:@"Other"];
+    UIImage *sectionImage = [UIImage imageNamed:imageName] ?: [UIImage imageWithContentsOfFile:[NSString stringWithFormat:jbpath(@INSTALL_PREFIX @"/Applications/Zebra.app/Sections/%@.png"), imageName]] ?: [UIImage imageNamed:@"Other"];
     return sectionImage;
 }
 

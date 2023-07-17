@@ -1,5 +1,5 @@
 ifeq ($(ROOTLESS),1)
-	export THEOS_PACKAGE_SCHEME = rootless
+	#export THEOS_PACKAGE_SCHEME = rootless
 	export ARCHS = arm64
 	export TARGET = iphone:latest:15.0
 	export DEB_ARCH = iphoneos-arm64

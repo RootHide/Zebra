@@ -457,7 +457,7 @@ typedef NS_ENUM(NSUInteger, ZBPackageInfoOrder) {
                       [[UIDevice currentDevice] systemVersion],
                       [ZBDevice jailbreakName],
                       [ZBDevice bootstrapName],
-                      [ZBDevice isPrefixed] ? @" (Rootless)" : @"",
+                      [ZBDevice isRootless] ? @" (Rootless)" : @"",
                       [ZBDevice isStashed] ? @" (Stashed)" : @""];
     if ([MFMailComposeViewController canSendMail]) {
         MFMailComposeViewController *mail = [[MFMailComposeViewController alloc] init];

@@ -478,7 +478,7 @@ typedef enum ZBInfoOrder : NSUInteger {
                 [ZBDevice jailbreakName],
                 [ZBDevice bootstrapName],
                 [ZBDevice isStashed] ? NSLocalizedString(@" (Stashed)", @"") : @"",
-                [ZBDevice isPrefixed] ? NSLocalizedString(@" (Rootless)", @"") : @""];
+                [ZBDevice isRootless] ? NSLocalizedString(@" (Rootless)", @"") : @""];
     }
     return NULL;
 }

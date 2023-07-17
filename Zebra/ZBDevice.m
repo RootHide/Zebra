@@ -5,7 +5,7 @@
 //  Created by Thatchapon Unprasert on 7/6/2019
 //  Copyright © 2019 Wilson Styres. All rights reserved.
 //
-#include "jbpath.h"
+#include "jbroot.h"
 
 #import "ZBDevice.h"
 #import "ZBSettings.h"
@@ -127,7 +127,7 @@ static ZBBootstrap bootstrap = ZBBootstrapUnknown;
     //       Skipping it there for now, if we get to this point we should be confident that
     //       supersling is working anyway.
     if (@available(iOS 11, *)) {
-        NSString *whoAmI = [ZBCommand execute:jbpath(@INSTALL_PREFIX @"/usr/bin/id") withArguments:@[@"-u"] asRoot:YES] ?: @"?";
+        NSString *whoAmI = [ZBCommand execute:jbroot(@INSTALL_PREFIX @"/usr/bin/id") withArguments:@[@"-u"] asRoot:YES] ?: @"?";
         if (![whoAmI isEqualToString:@"0\n"]) {
             if (error) {
                 *error = [NSError errorWithDomain:NSCocoaErrorDomain code:51 userInfo:@{
@@ -305,7 +305,7 @@ static ZBBootstrap bootstrap = ZBBootstrapUnknown;
     if (self.needsSimulation) {
         bootstrap = ZBBootstrapSimulated;
     } else if (@available(iOS 11, *)) {
-        if ([self _isRegularFile:jbpath(@INSTALL_PREFIX @"/.procursus_strapped")]) {
+        if ([self _isRegularFile:jbroot(@INSTALL_PREFIX @"/.procursus_strapped")]) {
             bootstrap = ZBBootstrapProcursus;
         } else {
             bootstrap = ZBBootstrapElucubratus;
@@ -327,10 +327,10 @@ static ZBBootstrap bootstrap = ZBBootstrapUnknown;
         @"/.installed_unc0ver":    @(ZBJailbreakUnc0ver),
         @"/.installed_odyssey":    @(ZBJailbreakOdyssey),
         @"/.installed_taurine":    @(ZBJailbreakTaurine),
-        jbpath(@INSTALL_PREFIX @"/.installed_palera1n"):  @(ZBJailbreakPalera1n), // 1.x
-        jbpath(@INSTALL_PREFIX @"/.palecursus_strapped"): @(ZBJailbreakPalera1n), // 2.x
-        jbpath(@INSTALL_PREFIX @"/.installed_fugu15max"): @(ZBJailbreakDopamine),
-        jbpath(@INSTALL_PREFIX @"/.installed_dopamine"):  @(ZBJailbreakDopamine),
+        jbroot(@INSTALL_PREFIX @"/.installed_palera1n"):  @(ZBJailbreakPalera1n), // 1.x
+        jbroot(@INSTALL_PREFIX @"/.palecursus_strapped"): @(ZBJailbreakPalera1n), // 2.x
+        jbroot(@INSTALL_PREFIX @"/.installed_fugu15max"): @(ZBJailbreakDopamine),
+        jbroot(@INSTALL_PREFIX @"/.installed_dopamine"):  @(ZBJailbreakDopamine),
         @"/.installed_socket":     @(ZBJailbreakSocket),
         @"/.p0laris":              @(ZBJailbreakP0laris),
         @"/.installed-openpwnage": @(ZBJailbreakOpenpwnage),
@@ -390,6 +390,10 @@ static ZBBootstrap bootstrap = ZBBootstrapUnknown;
     return isPrefixed;
 }
 
++ (BOOL)isRootless {
+    return YES;
+}
+
 + (ZBBootstrap)bootstrap {
     return bootstrap;
 }
@@ -447,23 +451,23 @@ static ZBBootstrap bootstrap = ZBBootstrapUnknown;
     static NSString *packageManagementBinary = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        if ([[NSFileManager defaultManager] fileExistsAtPath:jbpath(@INSTALL_PREFIX @"/usr/bin/apt")]) {
-            packageManagementBinary = jbpath(@INSTALL_PREFIX @"/usr/bin/apt");
+        if ([[NSFileManager defaultManager] fileExistsAtPath:jbroot(@INSTALL_PREFIX @"/usr/bin/apt")]) {
+            packageManagementBinary = jbroot(@INSTALL_PREFIX @"/usr/bin/apt");
         }
-        else if ([[NSFileManager defaultManager] fileExistsAtPath:jbpath(@INSTALL_PREFIX @"/usr/bin/dpkg")]) {
-            packageManagementBinary = jbpath(@INSTALL_PREFIX @"/usr/bin/dpkg");
+        else if ([[NSFileManager defaultManager] fileExistsAtPath:jbroot(@INSTALL_PREFIX @"/usr/bin/dpkg")]) {
+            packageManagementBinary = jbroot(@INSTALL_PREFIX @"/usr/bin/dpkg");
         }
     });
     return packageManagementBinary;
 }
 
-+ (NSString *)path {
++ (NSString *)path:(BOOL)prefix {
     // Construct a safe PATH. This will be set app-wide.
     NSArray <NSString *> *path = @[@"/usr/sbin", @"/usr/bin", @"/sbin", @"/bin"];
-    if (isPrefixed) {
+    if (prefix) {
         NSMutableArray <NSString *> *prefixedPath = [NSMutableArray array];
         for (NSString *item in path) {
-            [prefixedPath addObject:[jbpath(@INSTALL_PREFIX) stringByAppendingPathComponent:item]];
+            [prefixedPath addObject:jbroot([@INSTALL_PREFIX stringByAppendingPathComponent:item])];
         }
         path = [prefixedPath arrayByAddingObjectsFromArray:path];
     }

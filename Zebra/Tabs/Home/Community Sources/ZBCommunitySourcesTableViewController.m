@@ -5,7 +5,7 @@
 //  Created by midnightchips on 6/30/19.
 //  Copyright © 2019 Wilson Styres. All rights reserved.
 //
-#include "jbpath.h"
+#include "jbroot.h"
 
 #import "ZBCommunitySourcesTableViewController.h"
 
@@ -86,40 +86,40 @@
 
 - (NSArray *)packageManagers {
     NSMutableArray *result = [NSMutableArray new];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:jbpath(@INSTALL_PREFIX @"/Applications/Cydia.app/Cydia")]) {
+    if ([[NSFileManager defaultManager] fileExistsAtPath:jbroot(@INSTALL_PREFIX @"/Applications/Cydia.app/Cydia")]) {
         NSDictionary *dict = @{@"type" : @"transfer",
                                @"name" : @"Cydia",
                                @"label": [NSString stringWithFormat:NSLocalizedString(@"Transfer sources from %@ to Zebra", @""), @"Cydia"],
-                               @"url"  : [@"file://" stringByAppendingString:jbpath(@INSTALL_PREFIX @"/etc/apt/sources.list.d/")],
+                               @"url"  : [@"file://" stringByAppendingString:jbroot(@INSTALL_PREFIX @"/etc/apt/sources.list.d/")],
                                @"ext"  : @"list",
-                               @"icon" : [@"file://" stringByAppendingString:jbpath(@INSTALL_PREFIX @"/Applications/Cydia.app/Icon-60@2x.png")] };
+                               @"icon" : [@"file://" stringByAppendingString:jbroot(@INSTALL_PREFIX @"/Applications/Cydia.app/Icon-60@2x.png")] };
         [result addObject:dict];
     }
-    if ([[NSFileManager defaultManager] fileExistsAtPath:jbpath(@INSTALL_PREFIX @"/Applications/Installer.app/Installer")]) {
+    if ([[NSFileManager defaultManager] fileExistsAtPath:jbroot(@INSTALL_PREFIX @"/Applications/Installer.app/Installer")]) {
         NSDictionary *dict = @{@"type" : @"transfer",
                                @"name" : @"Installer",
                                @"label": [NSString stringWithFormat:NSLocalizedString(@"Transfer sources from %@ to Zebra", @""), @"Installer"],
                                @"url"  : @"file:///var/mobile/Library/Application%20Support/Installer/APT/sources.list",
                                @"ext"  : @"list",
-                               @"icon" : [@"file://" stringByAppendingString:jbpath(@INSTALL_PREFIX @"/Applications/Installer.app/AppIcon60x60@2x.png")] };
+                               @"icon" : [@"file://" stringByAppendingString:jbroot(@INSTALL_PREFIX @"/Applications/Installer.app/AppIcon60x60@2x.png")] };
         [result addObject:dict];
     }
-    if ([[NSFileManager defaultManager] fileExistsAtPath:jbpath(@INSTALL_PREFIX @"/Applications/Sileo.app/Sileo")]) {
+    if ([[NSFileManager defaultManager] fileExistsAtPath:jbroot(@INSTALL_PREFIX @"/Applications/Sileo.app/Sileo")]) {
         NSDictionary *dict = @{@"type" : @"transfer",
                                @"name" : @"Sileo",
                                @"label": [NSString stringWithFormat:NSLocalizedString(@"Transfer sources from %@ to Zebra", @""), @"Sileo"],
-                               @"url"  : [ZBDevice jailbreak] == ZBJailbreakCheckra1n ? [@"file://" stringByAppendingString:jbpath(@INSTALL_PREFIX @"/etc/apt/sileo.list.d/")] : [@"file://" stringByAppendingString:jbpath(@INSTALL_PREFIX @"/etc/apt/sources.list.d/")],
+                               @"url"  : [ZBDevice jailbreak] == ZBJailbreakCheckra1n ? [@"file://" stringByAppendingString:jbroot(@INSTALL_PREFIX @"/etc/apt/sileo.list.d/")] : [@"file://" stringByAppendingString:jbroot(@INSTALL_PREFIX @"/etc/apt/sources.list.d/")],
                                @"ext"  : @"sources",
-                               @"icon" : [@"file://" stringByAppendingString:jbpath(@INSTALL_PREFIX @"/Applications/Sileo.app/AppIcon60x60@2x.png")] };
+                               @"icon" : [@"file://" stringByAppendingString:jbroot(@INSTALL_PREFIX @"/Applications/Sileo.app/AppIcon60x60@2x.png")] };
         [result addObject:dict];
     }
-    if ([[NSFileManager defaultManager] fileExistsAtPath:jbpath(@INSTALL_PREFIX @"/Applications/Sileo-Nightly.app/Sileo")]) {
+    if ([[NSFileManager defaultManager] fileExistsAtPath:jbroot(@INSTALL_PREFIX @"/Applications/Sileo-Nightly.app/Sileo")]) {
         NSDictionary *dict = @{@"type" : @"transfer",
                                @"name" : @"Sileo Nightly",
                                @"label": [NSString stringWithFormat:NSLocalizedString(@"Transfer sources from %@ to Zebra", @""), @"Sileo Nightly"],
-                               @"url"  : [ZBDevice jailbreak] == ZBJailbreakCheckra1n ? [@"file://" stringByAppendingString:jbpath(@INSTALL_PREFIX @"/etc/apt/sileo.list.d/")] : [@"file://" stringByAppendingString:jbpath(@INSTALL_PREFIX @"/etc/apt/sources.list.d/")],
+                               @"url"  : [ZBDevice jailbreak] == ZBJailbreakCheckra1n ? [@"file://" stringByAppendingString:jbroot(@INSTALL_PREFIX @"/etc/apt/sileo.list.d/")] : [@"file://" stringByAppendingString:jbroot(@INSTALL_PREFIX @"/etc/apt/sources.list.d/")],
                                @"ext"  : @"sources",
-                               @"icon" : [@"file://" stringByAppendingString:jbpath(@INSTALL_PREFIX @"/Applications/Sileo-Nightly.app/AppIcon60x60@2x.png")] };
+                               @"icon" : [@"file://" stringByAppendingString:jbroot(@INSTALL_PREFIX @"/Applications/Sileo-Nightly.app/AppIcon60x60@2x.png")] };
         [result addObject:dict];
     }
     return result;
@@ -166,7 +166,7 @@
         break;
 
     case ZBJailbreakPalera1n:
-        if ([ZBDevice isPrefixed]) {
+        if ([ZBDevice isRootless]) {
             [result addObject:@{@"type": @"utility",
                                 @"name": @"Procursus",
                                 @"url" : @"https://apt.procurs.us/",

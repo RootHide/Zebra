@@ -193,7 +193,7 @@ NSString *const ZBUserEndedScreenCaptureNotification = @"EndedScreenCaptureNotif
     [self _configureErrorReporting];
     [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:SendErrorReportsKey options:kNilOptions context:nil];
 
-    setenv("PATH", [ZBDevice path].UTF8String, 1);
+    setenv("PATH", [ZBDevice path:YES].UTF8String, 1);
 
     [SDImageCache sharedImageCache].config.maxDiskAge = kZebraMaxTime;
     

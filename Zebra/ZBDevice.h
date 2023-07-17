@@ -74,7 +74,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSArray <NSString *> *)allDebianArchitectures;
 + (NSString *)debianArchitecture;
 + (nullable NSString *)packageManagementBinary;
-+ (NSString *)path;
++ (NSString *)path:(BOOL)prefix;
 
 + (void)hapticButton;
 
@@ -86,6 +86,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (BOOL)isStashed;
 + (BOOL)isPrefixed;
++ (BOOL)isRootless;
 + (ZBBootstrap)bootstrap;
 + (ZBJailbreak)jailbreak;
 + (NSString *)bootstrapName;

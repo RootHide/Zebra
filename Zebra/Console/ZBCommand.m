@@ -127,7 +127,7 @@ static const int ZBCommandFinishFileno = 3;
 
     // Construct environment vars
     NSMutableArray <NSString *> *environmentVars = [NSMutableArray array];
-    [environmentVars addObject:[NSString stringWithFormat:@"PATH=%@", [ZBDevice path]]];
+    [environmentVars addObject:[NSString stringWithFormat:@"PATH=%@", [ZBDevice path:NO]]];
     if (_useFinishFd) {
         // $CYDIA enables maintenance scripts to send “finish” messages to the package manager.
         // Contains two integers. First is the fd to write to, second is the API version
@@ -248,6 +248,11 @@ static const int ZBCommandFinishFileno = 3;
     // Spawn the child process
     pid_t pid = 0;
     int ret = posix_spawnp(&pid, _command.UTF8String, &child_fd_actions, &child_fd_attrs, argv, envp);
+    if(ret != 0) {
+        NSLog(@"spawn %s error:%d,%d,%s", _command.UTF8String, ret, errno, strerror(errno));
+        abort();
+    }
+    
     free(argv);
     free(envp);
     if (ret < 0) {

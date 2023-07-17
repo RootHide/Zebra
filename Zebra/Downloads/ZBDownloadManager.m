@@ -5,7 +5,7 @@
 //  Created by Wilson Styres on 4/14/19.
 //  Copyright © 2019 Wilson Styres. All rights reserved.
 //
-#include "jbpath.h"
+#include "jbroot.h"
 
 #import "ZBDownloadManager.h"
 
@@ -370,7 +370,7 @@
     case ZBJailbreakElectra:
         return ([host isEqualToString:@"checkra.in"] || [host isEqualToString:@"repo.chimera.sh"] || [host isEqualToString:@"apt.saurik.com"] || [host isEqualToString:@"apt.bingner.com"]);
     default:
-        if ([[NSFileManager defaultManager] fileExistsAtPath:jbpath(@INSTALL_PREFIX @"/Applications/Cydia.app")]) { // cydia
+        if ([[NSFileManager defaultManager] fileExistsAtPath:jbroot(@INSTALL_PREFIX @"/Applications/Cydia.app")]) { // cydia
             return ([host isEqualToString:@"checkra.in"] || [host isEqualToString:@"repo.chimera.sh"] || [host isEqualToString:@"electrarepo64.coolstar.org"] || [host isEqualToString:@"apt.bingner.com"]);
         }
         return NO;

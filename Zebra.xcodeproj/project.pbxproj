@@ -226,9 +226,9 @@
 		4ECB1DF42948C9FD0049FE08 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7821AF6D2275F3A4006C0315 /* ZBAddSourceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZBAddSourceViewController.m; sourceTree = "<group>"; };
 		7821AF6E2275F3A4006C0315 /* ZBAddSourceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZBAddSourceViewController.h; sourceTree = "<group>"; };
-		8406F24D2A51E10C006DC43A /* jbpath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jbpath.h; sourceTree = "<group>"; };
 		8406F2502A51E2C2006DC43A /* libjbpath.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libjbpath.dylib; sourceTree = "<group>"; };
 		84EC033C2A510F3C00D3DDB3 /* libjbpath.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libjbpath.dylib; path = Zebra/libjbpath.dylib; sourceTree = "<group>"; };
+		84F1653E2A62D839009D7455 /* jbroot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jbroot.h; sourceTree = "<group>"; };
 		8900FA4E2201E9C200476310 /* ZBQueueViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZBQueueViewController.h; sourceTree = "<group>"; };
 		8900FA4F2201E9C200476310 /* ZBQueueViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZBQueueViewController.m; sourceTree = "<group>"; };
 		8905455B243A8BEA001C03EA /* ZBPackageActionType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZBPackageActionType.h; sourceTree = "<group>"; };
@@ -830,7 +830,7 @@
 		89C5FDD421B1B13700A10E58 = {
 			isa = PBXGroup;
 			children = (
-				8406F24D2A51E10C006DC43A /* jbpath.h */,
+				84F1653E2A62D839009D7455 /* jbroot.h */,
 				8406F2502A51E2C2006DC43A /* libjbpath.dylib */,
 				89C5FDDF21B1B13700A10E58 /* Zebra */,
 				89C5FDDE21B1B13700A10E58 /* Products */,

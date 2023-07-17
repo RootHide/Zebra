@@ -391,7 +391,7 @@
                 zebraPath = package.debPath;
             }
             else {
-                [result addObject:package.debPath];
+                [result addObject:jbroot_revert(package.debPath)];
             }
         }
     }

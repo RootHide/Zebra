@@ -294,10 +294,10 @@ typedef NS_ENUM(NSUInteger, ZBConsoleFinishOption) {
                 
                 NSArray *baseCommand;
                 if ([[ZBDevice packageManagementBinary] isEqualToString:jbroot(@INSTALL_PREFIX @"/usr/bin/dpkg")]) {
-                    baseCommand = @[@"dpkg", queue.removingZebra ? @"-r" : @"-i", queue.zebraPath ? path : @"xyz.willy.zebra"];
+                    baseCommand = @[@"dpkg", queue.removingZebra ? @"-r" : @"-i", queue.zebraPath ? jbroot_revert(path) : @"xyz.willy.zebra"];
                 }
                 else {
-                    baseCommand = @[@"apt", @"-yqf", @"--allow-downgrades", @"-oApt::Get::HideAutoRemove=true", @"-oquiet::NoProgress=true", @"-oquiet::NoStatistic=true", queue.removingZebra ? @"remove" : @"install", queue.zebraPath ? path : @"xyz.willy.zebra"];
+                    baseCommand = @[@"apt", @"-yqf", @"--allow-downgrades", @"-oApt::Get::HideAutoRemove=true", @"-oquiet::NoProgress=true", @"-oquiet::NoStatistic=true", queue.removingZebra ? @"remove" : @"install", queue.zebraPath ? jbroot_revert(path) : @"xyz.willy.zebra"];
                 }
                 
                 if (![ZBDevice needsSimulation]) {

@@ -191,6 +191,7 @@ static const int ZBCommandFinishFileno = 3;
             // Read from output and notify delegate
             NSString *string = [[NSString alloc] initWithBytes:buffer length:bytes encoding:NSUTF8StringEncoding];
             if (string) {
+                NSLog(@"output=%@", string);
                 action(string);
             }
         }
@@ -247,6 +248,7 @@ static const int ZBCommandFinishFileno = 3;
 
     // Spawn the child process
     pid_t pid = 0;
+    NSLog(@"spawn=%@, %@", _command, _arguments);
     int ret = posix_spawnp(&pid, _command.UTF8String, &child_fd_actions, &child_fd_attrs, argv, envp);
     if(ret != 0) {
         NSLog(@"spawn %s error:%d,%d,%s", _command.UTF8String, ret, errno, strerror(errno));

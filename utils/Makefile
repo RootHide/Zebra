@@ -1,7 +1,7 @@
 include $(THEOS)/makefiles/common.mk
 
 # Supersling and postinst aren’t needed for rootless builds.
-ifneq ($(THEOS_PACKAGE_SCHEME),rootless)
+ifneq ($(ROOTLESS),1)
 TOOL_NAME += supersling postinst
 
 supersling_FILES = supersling.c

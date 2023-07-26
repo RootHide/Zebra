@@ -31,6 +31,8 @@
 #import "ZebraKeys.private.h"
 #endif
 
+#include "jbroot.h"
+
 @import Sentry;
 
 @interface ZBAppDelegate () {
@@ -59,7 +61,7 @@ NSString *const ZBUserEndedScreenCaptureNotification = @"EndedScreenCaptureNotif
 + (NSString *)documentsDirectory {
     NSString *path_ = nil;
     if (![ZBDevice needsSimulation]) {
-        path_ = @"/var/mobile/Library/Application Support";
+        path_ = jbroot(@"/var/mobile/Library/Application Support");
     } else {
         path_ = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
     }
@@ -248,6 +250,7 @@ NSString *const ZBUserEndedScreenCaptureNotification = @"EndedScreenCaptureNotif
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(nonnull NSURL *)url options:(nonnull NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+    NSLog(@"application=%@, openURL=%@, options=%@", application, url, options);
     NSArray *choices = @[@"file", @"zbra", @"sileo"];
     int index = (int)[choices indexOfObject:[url scheme]];
     
@@ -260,6 +263,9 @@ NSString *const ZBUserEndedScreenCaptureNotification = @"EndedScreenCaptureNotif
             if ([[url pathExtension] isEqualToString:@"deb"]) {
                 
                 NSString *newLocation = [[[self class] debsLocation] stringByAppendingPathComponent:[url lastPathComponent]];
+                
+                //try to remove old first
+                [[NSFileManager defaultManager] removeItemAtPath:newLocation error:nil];
                 
                 NSError *moveError;
                 if ([options[UIApplicationOpenURLOptionsOpenInPlaceKey] boolValue]) {

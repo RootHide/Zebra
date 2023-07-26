@@ -117,6 +117,25 @@
 }
 
 - (BOOL)calculateArchitectureForPackage:(ZBPackage *)package {
+    
+    NSLog(@"dependsOn=%@", package.dependsOn);
+    NSLog(@"dependencies=%@", package.dependencies);
+    NSLog(@"dependencyOf=%@", package.dependencyOf);
+    
+    BOOL found=NO;
+    for (NSString *dependency in [package dependsOn]) {
+        NSString* depname = [dependency componentsSeparatedByString:@" "][0];
+        if([depname isEqualToString:@"roothide"]) {
+            found=YES;
+            break;
+        }
+    }
+    if(!found) {
+        [package addIssue:
+         NSLocalizedString(@"this package has not been updated for RootHide, please contact its developer.", @"")];
+        return NO;
+    }
+    
     if (![package.architecture isEqualToString:@"all"] && ![[ZBDevice allDebianArchitectures] containsObject:package.architecture]) {
         NSString *nativeArch = [ZBDevice debianArchitecture];
         NSString *message;

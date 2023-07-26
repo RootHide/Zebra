@@ -391,7 +391,7 @@
                 zebraPath = package.debPath;
             }
             else {
-                [result addObject:jbroot_revert(package.debPath)];
+                [result addObject:rootfs(package.debPath)];
             }
         }
     }

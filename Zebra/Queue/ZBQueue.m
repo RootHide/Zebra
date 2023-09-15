@@ -5,7 +5,7 @@
 //  Created by Wilson Styres on 1/29/19.
 //  Copyright © 2019 Wilson Styres. All rights reserved.
 //
-#include "jbroot.h"
+#include "roothide.h"
 
 #import "ZBQueue.h"
 #import "ZBPackage.h"
@@ -391,6 +391,7 @@
                 zebraPath = package.debPath;
             }
             else {
+                NSLog(@"pathsForPackagesInQueue %@", package.debPath);
                 [result addObject:rootfs(package.debPath)];
             }
         }

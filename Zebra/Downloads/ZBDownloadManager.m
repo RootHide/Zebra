@@ -5,7 +5,7 @@
 //  Created by Wilson Styres on 4/14/19.
 //  Copyright © 2019 Wilson Styres. All rights reserved.
 //
-#include "jbroot.h"
+#include "roothide.h"
 
 #import "ZBDownloadManager.h"
 

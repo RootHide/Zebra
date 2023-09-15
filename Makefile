@@ -1,5 +1,12 @@
-ifeq ($(ROOTLESS),1)
-	#export THEOS_PACKAGE_SCHEME = rootless
+ifeq ($(ROOTHIDE),1)
+	export THEOS_PACKAGE_SCHEME = roothide
+	export ARCHS = arm64
+	export TARGET = iphone:latest:15.0
+	export DEB_ARCH = iphoneos-arm64e
+	export IPHONEOS_DEPLOYMENT_TARGET = 15.0
+	XCODE_SCHEME = Zebra - Rootless
+else ifeq ($(ROOTLESS),1)
+	export THEOS_PACKAGE_SCHEME = rootless
 	export ARCHS = arm64
 	export TARGET = iphone:latest:15.0
 	export DEB_ARCH = iphoneos-arm64

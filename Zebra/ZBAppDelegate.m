@@ -31,7 +31,7 @@
 #import "ZebraKeys.private.h"
 #endif
 
-#include "jbroot.h"
+#include "roothide.h"
 
 @import Sentry;
 

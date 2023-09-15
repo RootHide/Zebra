@@ -165,7 +165,7 @@
     NSString *repositoryURI = NULL;
     NSString *distribution = NULL;
     NSMutableArray *sourceComponents = [NSMutableArray new];
-    
+    NSLog(@"lineComponents=%@",lineComponents);
     if (count > 0) {
         archiveType = lineComponents[0];
         if (count > 1) {
@@ -177,8 +177,9 @@
                 
                 if ([repositoryURI containsString:@"apt.procurs.us"]) { // Have to treat this differently because its special
                     NSString *dist = roundedCF >= 1900 ? @"" : @"iphoneos-arm64-rootless";
-                    NSString *kind = [ZBDevice isRootless] ? dist : @"iphoneos-arm64";
+                    NSString *kind = ([ZBDevice isPrefixed]||[ZBDevice isRootHide]) ? dist : @"iphoneos-arm64";
                     distribution = [NSString stringWithFormat:@"%@/%d", kind, roundedCF];
+                    NSLog(@"distribution=%@", distribution);
                 }
                 else if ([repositoryURI containsString:@"strap.palera.in"]) {
                     distribution = [NSString stringWithFormat:@"%@/%d", @"iphoneos-arm64", roundedCF];

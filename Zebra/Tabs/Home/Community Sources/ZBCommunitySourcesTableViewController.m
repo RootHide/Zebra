@@ -5,7 +5,7 @@
 //  Created by midnightchips on 6/30/19.
 //  Copyright © 2019 Wilson Styres. All rights reserved.
 //
-#include "jbroot.h"
+#include "roothide.h"
 
 #import "ZBCommunitySourcesTableViewController.h"
 
@@ -166,7 +166,7 @@
         break;
 
     case ZBJailbreakPalera1n:
-        if ([ZBDevice isRootless]) {
+        if ([ZBDevice isPrefixed]) {
             [result addObject:@{@"type": @"utility",
                                 @"name": @"Procursus",
                                 @"url" : @"https://apt.procurs.us/",

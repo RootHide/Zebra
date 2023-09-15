@@ -482,6 +482,7 @@
 
 + (NSString *)buttonTitleForPackage:(ZBPackage *)package {
     NSArray <NSNumber *> *actions = [package possibleActions];
+    NSLog(@"buttonTitleForPackage=%d", actions.count);
     if ([actions count] > 1) {
         return NSLocalizedString(@"Modify", @"");
     }

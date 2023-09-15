@@ -5,7 +5,7 @@
 //  Created by Wilson Styres on 2/6/19.
 //  Copyright © 2019 Wilson Styres. All rights reserved.
 //
-#include "jbroot.h"
+#include "roothide.h"
 
 #import "ZBConsoleViewController.h"
 #import "ZBStage.h"
@@ -316,7 +316,7 @@ typedef NS_ENUM(NSUInteger, ZBConsoleFinishOption) {
             }
         }
         [self refreshLocalPackages];
-        [self removeAllDebs];
+        //[self removeAllDebs];
         [self finishTasks];
     }
 }
@@ -501,7 +501,7 @@ typedef NS_ENUM(NSUInteger, ZBConsoleFinishOption) {
     while (file = [enumerator nextObject]) {
         NSError *error = nil;
         BOOL result = [[NSFileManager defaultManager] removeItemAtPath:[[ZBAppDelegate debsLocation] stringByAppendingPathComponent:file] error:&error];
-
+        NSLog(@"remove %@ %d", file, result);
         if (!result && error) {
             NSLog(@"[Zebra] Error while removing %@: %@", file, error);
         }

@@ -5,7 +5,7 @@
 //  Created by Wilson Styres on 2/2/19.
 //  Copyright © 2019 Wilson Styres. All rights reserved.
 //
-#include "jbroot.h"
+#include "roothide.h"
 
 #import "ZBPackage.h"
 #import "ZBPackageActions.h"
@@ -652,9 +652,9 @@
     if ([[self source] sourceID] == -1) {
         return nil; // No actions for virtual dependencies
     }
-    else if ([[self source] sourceID] == -2) {
-        return @[@(ZBPackageActionInstall)];
-    }
+//allow to reinstall local package    else if ([[self source] sourceID] == -2) {
+//        return @[@(ZBPackageActionInstall)];
+//    }
     
     NSMutableArray *actions = [NSMutableArray new];
     ZBQueue *queue = [ZBQueue sharedQueue];

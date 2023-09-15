@@ -5,7 +5,7 @@
 //  Created by Thatchapon Unprasert on 7/6/2019
 //  Copyright © 2019 Wilson Styres. All rights reserved.
 //
-#include "jbroot.h"
+#include "roothide.h"
 
 #import "ZBDevice.h"
 #import "ZBSettings.h"
@@ -390,7 +390,7 @@ static ZBBootstrap bootstrap = ZBBootstrapUnknown;
     return isPrefixed;
 }
 
-+ (BOOL)isRootless {
++ (BOOL)isRootHide {
     return YES;
 }
 

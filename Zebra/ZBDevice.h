@@ -86,7 +86,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (BOOL)isStashed;
 + (BOOL)isPrefixed;
-+ (BOOL)isRootless;
++ (BOOL)isRootHide;
 + (ZBBootstrap)bootstrap;
 + (ZBJailbreak)jailbreak;
 + (NSString *)bootstrapName;

@@ -5,7 +5,7 @@
 //  Created by Wilson Styres on 11/30/18.
 //  Copyright © 2018 Wilson Styres. All rights reserved.
 //
-#include "jbroot.h"
+#include "roothide.h"
 
 #import "ZBDatabaseManager.h"
 #import "ZBDependencyResolver.h"

@@ -145,11 +145,13 @@ static const int ZBCommandFinishFileno = 3;
     // Create our file actions to read data back from posix_spawn
     posix_spawn_file_actions_t child_fd_actions;
     posix_spawn_file_actions_init(&child_fd_actions);
+    
     posix_spawn_file_actions_addclose(&child_fd_actions, fds->stdOut[0]);
-    posix_spawn_file_actions_addclose(&child_fd_actions, fds->stdErr[0]);
     posix_spawn_file_actions_adddup2(&child_fd_actions, fds->stdOut[1], STDOUT_FILENO);
-    posix_spawn_file_actions_adddup2(&child_fd_actions, fds->stdErr[1], STDERR_FILENO);
     posix_spawn_file_actions_addclose(&child_fd_actions, fds->stdOut[1]);
+    
+    posix_spawn_file_actions_addclose(&child_fd_actions, fds->stdErr[0]);
+    posix_spawn_file_actions_adddup2(&child_fd_actions, fds->stdErr[1], STDERR_FILENO);
     posix_spawn_file_actions_addclose(&child_fd_actions, fds->stdErr[1]);
 
     if (_useFinishFd) {
@@ -234,6 +236,7 @@ static const int ZBCommandFinishFileno = 3;
         dispatch_source_set_cancel_handler(finishSource, ^{
             // Finish fd isn’t expected to be closed, so no semaphore involved here.
             close(self->fds->finish[0]);
+            dispatch_semaphore_signal(lock);
         });
     }
 
@@ -272,20 +275,32 @@ static const int ZBCommandFinishFileno = 3;
     // Close the write ends of the pipes so no odd data comes through them
     close(fds->stdOut[1]);
     close(fds->stdErr[1]);
+    if (_useFinishFd) {
+        close(fds->finish[1]);
+    }
 
     // We need to wait twice, once for the output handler and once for the error handler
     dispatch_semaphore_wait(lock, DISPATCH_TIME_FOREVER);
     dispatch_semaphore_wait(lock, DISPATCH_TIME_FOREVER);
+    
+    if (_useFinishFd) {
+        dispatch_semaphore_wait(lock, DISPATCH_TIME_FOREVER);
+    }
 
     // Waits for the child process to terminate
     int status = 0;
     waitpid(pid, &status, 0);
 
-    // The finish fd is unlikely to have closed on its own, so close it now.
-    if (_useFinishFd && !dispatch_source_testcancel(finishSource)) {
-        dispatch_source_cancel(finishSource);
-    }
+//will finishFD close itself before waitpid?
+//    // The finish fd is unlikely to have closed on its own, so close it now.
+//    if (_useFinishFd && !dispatch_source_testcancel(finishSource)) {
+//        dispatch_source_cancel(finishSource);
+//    }
 
+    /* make sure all fd closed, or (UAF)
+    Exception Type:  EXC_GUARD (SIGKILL)
+    Exception Subtype: GUARD_TYPE_FD
+    Exception Message:  CLOSE on file descriptor 2 (guarded with 0x08fd4dbfade2dead) */
     // Free our pipes
     free(fds);
 

@@ -939,7 +939,6 @@
 			isa = PBXGroup;
 			children = (
 				842F23F02AA33F0400EE2E9A /* libroothide.tbd */,
-				84EC033C2A510F3C00D3DDB3 /* libjbpath.dylib */,
 				8997843F2242D25800C1138C /* libbz2.tbd */,
 				895071982239E414004AE338 /* libMobileGestalt.tbd */,
 			);
@@ -1482,7 +1481,7 @@
 					"$(PROJECT_DIR)/Zebra",
 					"$(PROJECT_DIR)",
 				);
-				MARKETING_VERSION = 1.1.35;
+				MARKETING_VERSION = "1.1.36-1";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = xyz.willy.Zebra;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1596,7 +1595,7 @@
 					"$(PROJECT_DIR)/Zebra",
 					"$(PROJECT_DIR)",
 				);
-				MARKETING_VERSION = 1.1.35;
+				MARKETING_VERSION = "1.1.36-1";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = xyz.willy.Zebra;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1772,7 +1771,7 @@
 					"$(PROJECT_DIR)/Zebra",
 					"$(PROJECT_DIR)",
 				);
-				MARKETING_VERSION = 1.1.35;
+				MARKETING_VERSION = "1.1.36-1";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = xyz.willy.Zebra;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1824,7 +1823,7 @@
 					"$(PROJECT_DIR)/Zebra",
 					"$(PROJECT_DIR)",
 				);
-				MARKETING_VERSION = 1.1.35;
+				MARKETING_VERSION = "1.1.36-1";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = xyz.willy.Zebra;
 				PRODUCT_NAME = "$(TARGET_NAME)";

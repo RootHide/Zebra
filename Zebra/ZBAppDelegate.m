@@ -107,12 +107,24 @@ NSString *const ZBUserEndedScreenCaptureNotification = @"EndedScreenCaptureNotif
     return [NSURL fileURLWithPath:[self sourcesListPath]];
 }
 
+int getCFMajorVersion()
+{
+    return ((int)kCFCoreFoundationVersionNumber / 100) * 100;
+}
+
 + (NSString *)sourcesListPath {
     NSString *lists = [[self documentsDirectory] stringByAppendingPathComponent:@"sources.list"];
     if (![[NSFileManager defaultManager] fileExistsAtPath:lists]) {
         ZBLog(@"[Zebra] Creating sources.list.");
         NSError *error = NULL;
-        [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle] pathForResource:@"default" ofType:@"list"] toPath:lists error:&error];
+
+        NSString* defaultlist = [[NSBundle mainBundle] pathForResource:@"default" ofType:@"list"];
+        NSString* sources = [NSString stringWithContentsOfFile:defaultlist encoding:NSUTF8StringEncoding error:&error];
+        assert(sources != nil);
+        
+        sources = [NSString stringWithFormat:sources, getCFMajorVersion()];
+        
+        [sources writeToFile:lists atomically:YES encoding:NSUTF8StringEncoding error:&error];
         
         if (error != NULL) {
             [self sendErrorToTabController:[NSString stringWithFormat:NSLocalizedString(@"Error while creating sources.list: %@", @""), error.localizedDescription]];

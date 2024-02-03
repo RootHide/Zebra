@@ -95,12 +95,13 @@
 
     session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
     for (ZBBaseSource *source in sources) {
-        NSURLSessionTask *releaseTask = [session downloadTaskWithURL:source.releaseURL];
+        NSURLSessionTask *releaseTask = [session downloadTaskWithURL:source.releaseURL]; NSLog(@"downloadTaskWithURL: %@", source.releaseURL);
         
         source.releaseTaskIdentifier = releaseTask.taskIdentifier;
         [sourceTasksMap setObject:source forKey:@(releaseTask.taskIdentifier)];
         [releaseTask resume];
         
+        NSLog(@"try to download Packages.bz2 first %@", source);
         [self downloadPackagesFileWithExtension:@"bz2" fromSource:source ignoreCaching:ignore];
         
         [downloadDelegate startedSourceDownload:source];
@@ -120,7 +121,7 @@
         [packagesRequest setValue:[self lastModifiedDateForFile:[self saveNameForURL:url]] forHTTPHeaderField:@"If-Modified-Since"];
     }
     
-    NSURLSessionTask *packagesTask = [session downloadTaskWithRequest:packagesRequest];
+    NSURLSessionTask *packagesTask = [session downloadTaskWithRequest:packagesRequest]; NSLog(@"downloadTaskWithRequest %@", packagesRequest);
 
     source.packagesTaskIdentifier = packagesTask.taskIdentifier;
     [sourceTasksMap setObject:source forKey:@(packagesTask.taskIdentifier)];
@@ -156,7 +157,7 @@
         NSURL *base = [NSURL URLWithString:comps[0]];
         
         if (url && url.host && url.scheme) {
-            NSURLSessionDownloadTask *downloadTask = [session downloadTaskWithURL:url];
+            NSURLSessionDownloadTask *downloadTask = [session downloadTaskWithURL:url]; NSLog(@"downloadTaskWithURL: %@", url);
             [downloadTask resume];
             
             [packageTasksMap setObject:package forKey:@(downloadTask.taskIdentifier)];
@@ -171,7 +172,7 @@
             }
                                                            completion:^(NSURL * _Nullable url, NSError * _Nullable error) {
                 if (url && !error) {
-                    NSURLSessionDownloadTask *downloadTask = [self->session downloadTaskWithURL:url];
+                    NSURLSessionDownloadTask *downloadTask = [self->session downloadTaskWithURL:url]; NSLog(@"downloadTaskWithURL: %@", url);
                     [downloadTask resume];
                     
                     [self->packageTasksMap setObject:package forKey:@(downloadTask.taskIdentifier)];
@@ -189,7 +190,7 @@
                 
             base = [NSURL URLWithString:baseString];
             
-            NSURLSessionTask *downloadTask = [session downloadTaskWithURL:base];
+            NSURLSessionTask *downloadTask = [session downloadTaskWithURL:base]; NSLog(@"downloadTaskWithURL: %@", base);
             [downloadTask resume];
             
             [self->packageTasksMap setObject:package forKey:@(downloadTask.taskIdentifier)];
@@ -206,6 +207,8 @@
 #pragma mark - Handling Downloaded Files
 
 - (void)task:(NSURLSessionTask *_Nonnull)task completedDownloadedForFile:(NSString *_Nullable)path fromSource:(ZBBaseSource *_Nonnull)source withError:(NSError *_Nullable)error {
+    //path=nil 7& errir=nil if packages file have not changed (http304)
+    NSLog(@"completedDownloadedForFile %@\n%@\n%@", path, source, error);
     if (error) { //An error occured, we should handle it accordingly
         if (error.code == NSURLErrorTimedOut && (task.taskIdentifier == source.releaseTaskIdentifier || task.taskIdentifier == source.packagesTaskIdentifier)) { // If one of these files times out, the source is likely down. We're going to cancel the entire task.
             
@@ -221,7 +224,8 @@
         }
         else if (task.taskIdentifier == source.packagesTaskIdentifier) { //This is a packages file that failed, we should be able to try again with a Packages.gz or a Packages file
             NSURL *url = [[task originalRequest] URL];
-            if (![url pathExtension]) { //No path extension, Packages file download failed :(
+            if ([[url pathExtension] length]==0)
+            { //No path extension, Packages file download failed :(
                 NSString *filename = [[task response] suggestedFilename];
                 if ([filename pathExtension] != nil) {
                     filename = [filename stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@".%@", [filename pathExtension]] withString:@""]; //Remove path extension
@@ -231,6 +235,7 @@
                 
                 source.packagesTaskCompleted = YES;
                 source.packagesFilePath = nil;
+                NSLog(@"source.packagesFilePath%d=%@\n%@", __LINE__, source.packagesFilePath, source);
                 
                 [self postStatusUpdate:description atLevel:ZBLogLevelError];
                 [self cancelTasksForSource:source];
@@ -248,6 +253,7 @@
                     
                     source.packagesTaskCompleted = YES;
                     source.packagesFilePath = nil;
+                    NSLog(@"source.packagesFilePath%d=%@\n%@", __LINE__, source.packagesFilePath, source);
                     
                     [self postStatusUpdate:description atLevel:ZBLogLevelWarning];
                     [self cancelTasksForSource:source];
@@ -261,6 +267,7 @@
             
             source.packagesTaskCompleted = YES;
             source.packagesFilePath = nil;
+            NSLog(@"source.packagesFilePath%d=%@\n%@", __LINE__, source.packagesFilePath, source);
             source.releaseTaskCompleted = YES;
             source.releaseFilePath = nil;
             
@@ -273,7 +280,8 @@
     else {
         if (task.taskIdentifier == source.packagesTaskIdentifier) {
             source.packagesTaskCompleted = YES;
-            source.packagesFilePath = path;
+            source.packagesFilePath = path; //=nil if packages file have not changed (http304)
+            NSLog(@"source.packagesFilePath%d=%@\n%@", __LINE__, source.packagesFilePath, source);
         }
         else if (task.taskIdentifier == source.releaseTaskIdentifier) {
             source.releaseTaskCompleted = YES;
@@ -434,6 +442,7 @@
 #pragma mark - URL Session Delegate
 
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location {
+    NSLog(@"didFinishDownloadingToURL %@ : %@\n%@", downloadTask.response.URL, [downloadTask response], location);
     NSURLResponse *response = [downloadTask response];
     NSInteger responseCode = [(NSHTTPURLResponse *)response statusCode];
     
@@ -447,7 +456,15 @@
     
     NSString *MIMEType = [response MIMEType];
     NSString *requestedMIMEType = [self guessMIMETypeForFile:[[response URL] lastPathComponent]];
-    NSArray *acceptableMIMETypes = @[@"text/plain", @"application/x-xz", @"application/x-bzip2", @"application/x-gzip", @"application/x-lzma", @"application/x-deb", @"application/x-debian-package"];
+    NSLog(@"requestedMIMEType=%@", requestedMIMEType);
+    NSArray *acceptableMIMETypes = @[
+        @"text/plain",
+        @"application/x-xz",
+        @"application/x-bzip2",
+        @"application/x-gzip",
+        @"application/x-lzma",
+        @"application/x-deb",
+        @"application/x-debian-package"];
     NSUInteger index = [acceptableMIMETypes indexOfObject:MIMEType];
     if (packageTasksMap[@([downloadTask taskIdentifier])]) {
         MIMEType = @"application/x-deb";

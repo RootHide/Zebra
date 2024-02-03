@@ -14,3 +14,14 @@ int main(int argc, char * argv[]) {
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([ZBAppDelegate class]));
     }
 }
+
+void CLog(const char* format, ...)
+{
+    va_list aptr;
+    char* buffer = NULL;
+    va_start(aptr, format);
+    vasprintf(&buffer, format, aptr);
+    va_end(aptr);
+    NSLog(@"%s", buffer);
+    free(buffer);
+}

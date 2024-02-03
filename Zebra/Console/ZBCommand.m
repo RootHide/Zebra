@@ -127,6 +127,7 @@ static const int ZBCommandFinishFileno = 3;
 
     // Construct environment vars
     NSMutableArray <NSString *> *environmentVars = [NSMutableArray array];
+    //apt will overwrite PATH for dpkg
     [environmentVars addObject:[NSString stringWithFormat:@"PATH=%@", [ZBDevice path:NO]]];
     if (_useFinishFd) {
         // $CYDIA enables maintenance scripts to send “finish” messages to the package manager.

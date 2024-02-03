@@ -461,6 +461,7 @@ static ZBBootstrap bootstrap = ZBBootstrapUnknown;
     return packageManagementBinary;
 }
 
+//apt will overwrite PATH for dpkg
 + (NSString *)path:(BOOL)prefix {
     // Construct a safe PATH. This will be set app-wide.
     NSArray <NSString *> *path = @[@"/usr/sbin", @"/usr/bin", @"/sbin", @"/bin"];
@@ -470,6 +471,12 @@ static ZBBootstrap bootstrap = ZBBootstrapUnknown;
             [prefixedPath addObject:jbroot([@INSTALL_PREFIX stringByAppendingPathComponent:item])];
         }
         path = [prefixedPath arrayByAddingObjectsFromArray:path];
+    } else {
+        NSMutableArray <NSString *> *rootfsPath = [NSMutableArray array];
+        for (NSString *item in path) {
+            [rootfsPath addObject:rootfs(item)];
+        }
+        path = [path arrayByAddingObjectsFromArray:rootfsPath];
     }
     return [path componentsJoinedByString:@":"];
 }

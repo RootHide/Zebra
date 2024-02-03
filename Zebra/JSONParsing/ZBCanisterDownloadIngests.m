@@ -38,11 +38,11 @@
 -(NSDictionary *)dictionary {
     NSLog(@"dictionary=%@\n%@\n%@\n%@\n%@\n%@", self, self.package_id, self.package_version,self.package_author,self.package_maintainer,self.repostiory_uri);
     return @{
-        @"package_id": self.package_id,
-        @"package_version": self.package_version,
-        @"package_author": self.package_author,
-        @"package_maintainer": self.package_maintainer,
-        @"repository_uri": self.repostiory_uri?:@"" //local package crash here (=nil)
+        @"package_id": self.package_id ?: [NSNull null],
+        @"package_version": self.package_version ?: [NSNull null],
+        @"package_author": self.package_author ?: [NSNull null],
+        @"package_maintainer": self.package_maintainer ?: [NSNull null],
+        @"repository_uri": self.repostiory_uri ?: [NSNull null]
     };
 }
 

@@ -14,6 +14,8 @@
 #include <time.h>
 #include "ZBColumn.h"
 
+void CLog(const char*, ...);
+
 #define LONG_DESCRIPTION_MAX_LENGTH 32768
 
 char *trim(char *s) {
@@ -175,6 +177,7 @@ void printDatabaseError(sqlite3 *database) {
 }
 
 enum PARSEL_RETURN_TYPE addSourceToDatabase(struct ZBBaseSource source, const char *releasePath, sqlite3 *database, int sourceID, bool update) {
+    CLog("addSourceToDatabase %d %s", sourceID, releasePath);
     FILE *file = fopen(releasePath, "r");
     if (file == NULL) {
         return PARSEL_FILENOTFOUND;
@@ -233,10 +236,12 @@ enum PARSEL_RETURN_TYPE addSourceToDatabase(struct ZBBaseSource source, const ch
 }
 
 enum PARSEL_RETURN_TYPE importSourceToDatabase(struct ZBBaseSource source, const char *releasePath, sqlite3 *database, int sourceID) {
+    CLog("importSourceToDatabase");
     return addSourceToDatabase(source, releasePath, database, sourceID, false);
 }
 
 enum PARSEL_RETURN_TYPE updateSourceInDatabase(struct ZBBaseSource source, const char *releasePath, sqlite3 *database, int sourceID) {
+    CLog("updateSourceInDatabase");
     return addSourceToDatabase(source, releasePath, database, sourceID, true);
 }
 
@@ -385,6 +390,7 @@ bool bindPackage(dict **package_, int sourceID, int safeID, char *longDescriptio
 
             sqlite3_bind_text(insertStatement, 1 + ZBPackageColumnSupport, dict_get(package, "Support"), -1, SQLITE_TRANSIENT);
 
+//            CLog("ZBPackageColumnDepends %s : %s", packageIdentifier, depends);
             sqlite3_bind_text(insertStatement, 1 + ZBPackageColumnDepends, depends[0] == '\0' ? NULL : depends, -1, SQLITE_TRANSIENT);
             sqlite3_bind_text(insertStatement, 1 + ZBPackageColumnConflicts, dict_get(package, "Conflicts"), -1, SQLITE_TRANSIENT);
             sqlite3_bind_text(insertStatement, 1 + ZBPackageColumnProvides, dict_get(package, "Provides"), -1, SQLITE_TRANSIENT);
@@ -462,6 +468,8 @@ bool bindPackage(dict **package_, int sourceID, int safeID, char *longDescriptio
 }
 
 enum PARSEL_RETURN_TYPE importPackagesToDatabase(const char *path, sqlite3 *database, int sourceID) {
+    CLog("importPackagesToDatabase %d %s", sourceID, path);
+    
     FILE *file = fopen(path, "r");
     if (file == NULL) {
         return PARSEL_FILENOTFOUND;
@@ -548,11 +556,12 @@ enum PARSEL_RETURN_TYPE importPackagesToDatabase(const char *path, sqlite3 *data
 }
 
 enum PARSEL_RETURN_TYPE updatePackagesInDatabase(const char *path, sqlite3 *database, int sourceID, sqlite3_int64 currentDate) {
+    CLog("updatePackagesInDatabase %d %s", sourceID, path);
     FILE *file = fopen(path, "r");
     if (file == NULL) {
         return PARSEL_FILENOTFOUND;
     }
-    char line[2048];
+    char line[4096];
     
     sqlite3_exec(database, "BEGIN TRANSACTION", NULL, NULL, NULL);
     char sql[64];
@@ -564,7 +573,7 @@ enum PARSEL_RETURN_TYPE updatePackagesInDatabase(const char *path, sqlite3 *data
     bool longDescFlag = false;
     
     char longDescription[LONG_DESCRIPTION_MAX_LENGTH] = "";
-    char depends[512] = "";
+    char depends[4096] = "";
     
     while (fgets(line, sizeof(line), file)) {
         if (strlen(trim(line)) != 0) {
@@ -596,10 +605,12 @@ enum PARSEL_RETURN_TYPE updatePackagesInDatabase(const char *path, sqlite3 *data
                 key = multi_tok(info, &s, ":");
                 value = multi_tok(NULL, &s, NULL);
             }
-            
+//            CLog("line=%s", line);
+//            CLog("info=%s", info);
+//            CLog("keyvalue=%s -- %s", key, value);
             if (key != NULL && value != NULL && (strcmp(key, "Depends") == 0 || strcmp(key, "Pre-Depends") == 0)) {
                 size_t dependsLen = strlen(depends);
-                if (dependsLen + strlen(value) + 2 < 512) {
+                if (dependsLen + strlen(value) + 2 < sizeof(depends)) {
                     if (dependsLen) {
                         strcat(depends, ", ");
                     }

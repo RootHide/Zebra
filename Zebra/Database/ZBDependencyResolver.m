@@ -45,14 +45,18 @@
     NSString *packageIdentifier = [[dependency substringToIndex:openIndex] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     packageIdentifier = [packageIdentifier lowercaseString];
     
-    NSString *version = [[dependency substringWithRange:NSMakeRange(openIndex + 1, closeIndex - openIndex - 1)] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    NSString *comparison;
+    NSString *versionStr = [[dependency substringWithRange:NSMakeRange(openIndex + 1, closeIndex - openIndex - 1)] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
-    NSScanner *scanner = [NSScanner scannerWithString:version];
-    NSCharacterSet *versionChars = [NSCharacterSet characterSetWithCharactersInString:@":.+-~abcdefghijklmnopqrstuvwxyz0123456789"];
+    NSScanner *scanner = [NSScanner scannerWithString:versionStr];
+    NSCharacterSet *versionChars = [NSCharacterSet characterSetWithCharactersInString:@":.+-~abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"];
+    
+    NSString *comparison;
     [scanner scanUpToCharactersFromSet:versionChars intoString:&comparison];
+
+    NSString *version;
     [scanner scanCharactersFromSet:versionChars intoString:&version];
     
+    NSLog(@"separateVersionComparison %@ (%@ %@ %@)", dependency, packageIdentifier, comparison, version);
     return @[packageIdentifier, comparison, version];
 }
 
@@ -61,6 +65,7 @@
 }
 
 + (BOOL)doesVersion:(NSString *)candidate satisfyComparison:(NSString *)comparison ofVersion:(NSString *)version {
+    NSLog(@"doesVersion %@ %@ %@", candidate, comparison, version);
     NSArray *choices = @[@"<<", @"<=", @"=", @">=", @">>"];
     comparison = [comparison stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 
@@ -72,6 +77,7 @@
 
     int nx = (int)[choices indexOfObject:comparison];
     NSComparisonResult result = [self compareVersion:candidate toVersion:version];
+    NSLog(@"compare %d %d", nx, result);
     switch (nx) {
         case 0:
             return result == NSOrderedAscending;
@@ -159,10 +165,11 @@
 - (BOOL)calculateDependenciesForPackage:(ZBPackage *)package {
     //On the first pass, remove any dependencies that are already satisfied
     NSMutableArray *unresolvedDependencies = [NSMutableArray new];
+    NSLog(@"[package dependsOn]=%@", [package dependsOn]);
     for (NSString *dependency in [package dependsOn]) {
         NSString *unresolvedDependency = [dependency stringByReplacingOccurrencesOfString:@" " withString:@""];
         if (![self isDependencyResolved:unresolvedDependency forPackage:package]) {
-            ZBLog(@"Adding unresolved dependency for %@: %@", package, unresolvedDependency);
+            ZBLog(@"Adding unresolved dependency1 for %@: %@", package, unresolvedDependency);
             [unresolvedDependencies addObject:unresolvedDependency];
         }
     }
@@ -258,7 +265,7 @@
     //At this point, we are left with only unresolved dependencies
     for (NSString *dependency in dependencies) {
         if (![self resolveDependency:dependency forPackage:package]) {
-            ZBLog(@"Adding unresolved dependency for %@: %@", package, dependency);
+            ZBLog(@"Adding unresolved dependency2 for %@: %@", package, dependency);
             [package addIssue:dependency];
             return NO;
         }
@@ -281,6 +288,7 @@
         //We should now have a separate version and a comparison string
         
         ZBPackage *dependencyPackage = [databaseManager packageForIdentifier:components[0] thatSatisfiesComparison:components[1] ofVersion:components[2]];
+        NSLog(@"components=%@ dependencyPackage=%@", components, dependencyPackage);
         if (dependencyPackage) {
             [self calculateArchitectureForPackage:dependencyPackage];
             return [self enqueueDependency:dependencyPackage forPackage:package ignoreFurtherDependencies:NO];

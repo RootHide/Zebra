@@ -3,4 +3,4 @@ deb https://getzbra.com/repo/ ./
 deb https://repo.chariz.com/ ./
 deb https://havoc.app/ ./
 deb https://roothide.github.io/ ./
-deb https://roothide.github.io/procursus iphoneos-arm64e/1800 main
+deb https://roothide.github.io/procursus iphoneos-arm64e/%d main

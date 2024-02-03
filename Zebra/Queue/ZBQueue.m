@@ -83,7 +83,7 @@
         [[self queueFromType:queue] addObject:package];
         [queuedPackagesList addObject:[package identifier]];
         if (queue == ZBQueueTypeInstall || queue == ZBQueueTypeUpgrade || queue == ZBQueueTypeDowngrade) {
-            NSLog(@"[Zebra] Finding dependencies for %@", package);
+            NSLog(@"[Zebra] Finding dependencies for %@\n%@", package, package.dependsOn);
             if ([self enqueueDependenciesForPackage:package]) {
                 NSLog(@"[Zebra] All dependencies found for %@", package);
             }

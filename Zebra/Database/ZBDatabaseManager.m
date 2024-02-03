@@ -389,6 +389,7 @@
                 }
 
                 //Deal with the packages
+                NSLog(@"source.packagesFilePath%d=%@\n%@", __LINE__, source.packagesFilePath, source);
                 if (source.packagesFilePath && updatePackagesInDatabase([source.packagesFilePath UTF8String], self->database, sourceID, currentDate) != PARSEL_OK) {
                     [self bulkPostStatusUpdate:[NSString stringWithFormat:@"%@ %@\n", NSLocalizedString(@"Error while opening file:", @""), source.packagesFilePath] atLevel:ZBLogLevelError];
                 }
@@ -1787,6 +1788,7 @@
             sqlite3_bind_text(statement, 1, [identifier UTF8String], -1, SQLITE_TRANSIENT);
             while (sqlite3_step(statement) == SQLITE_ROW) {
                 package = [[ZBPackage alloc] initWithSQLiteStatement:statement];
+                NSLog(@"package in database=%@", package);
                 break;
             }
         } else {
@@ -1801,6 +1803,7 @@
 
         if (package != NULL) {
             NSArray *otherVersions = [self allVersionsForPackage:package];
+            NSLog(@"otherVersions: %@", otherVersions);
             if (version != NULL && comparison != NULL) {
                 if ([otherVersions count] > 1) {
                     for (ZBPackage *package in otherVersions) {

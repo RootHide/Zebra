@@ -257,6 +257,7 @@
             tags = [tags[0] componentsSeparatedByString:@","];
         }
         
+//        NSLog(@"setDependsOn1:%s %@\n%s", packageIDChars, [self extract:dependsChars], dependsChars);
         [self setDependsOn:[self extract:dependsChars]];
         [self setConflictsWith:[self extract:conflictsChars]];
         [self setProvides:[self extract:providesChars]];
@@ -327,6 +328,7 @@
             tags = [tags[0] componentsSeparatedByString:@","];
         }
         
+//        NSLog(@"setDependsOn2:%@ %@\n%@", packageID, [self extract:[depends UTF8String]], depends);
         [self setDependsOn:[self extract:[depends UTF8String]]];
         [self setConflictsWith:[self extract:[conflicts UTF8String]]];
         [self setProvides:[self extract:[provides UTF8String]]];
@@ -626,7 +628,7 @@
 
 - (void)addIssue:(NSString *)issue {
     if (!issues) issues = [NSMutableArray new];
-    
+    NSLog(@"addIssue=%@", issue);
     [issues addObject:issue];
 }
 

@@ -206,6 +206,13 @@ int getCFMajorVersion()
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self _configureErrorReporting];
     [[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:SendErrorReportsKey options:kNilOptions context:nil];
+    
+    if(![[NSUserDefaults.standardUserDefaults stringForKey:@"appversion"] isEqualToString:@PACKAGE_VERSION]) {
+        [[NSFileManager defaultManager] removeItemAtPath:[ZBAppDelegate listsLocation] error:nil];
+        [[NSFileManager defaultManager] removeItemAtPath:[ZBAppDelegate databaseLocation] error:nil];
+        [NSUserDefaults.standardUserDefaults setValue:@PACKAGE_VERSION forKey:@"appversion"];
+        [NSUserDefaults.standardUserDefaults synchronize];
+    }
 
     setenv("PATH", [ZBDevice path:YES].UTF8String, 1);
 
